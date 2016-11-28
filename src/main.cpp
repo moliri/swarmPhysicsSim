@@ -1,7 +1,7 @@
 #pragma warning(disable:4996)
 
 #include <GL/glew.h>
-#include <GL/freeglut.h>
+#include "GL/freeglut.h"
 #include <iostream>
 #include <string.h>
 #include <time.h>
@@ -621,13 +621,14 @@ int main(int argc, char **argv)
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 		glutInitWindowSize(windowWidth, windowHeight);
+		glutCreateWindow("Kilobot simulator");
 		glutInitWindowPosition(0, 0);
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0f, 1000, 1000, 0.0f, 0.0f, 1.0f);
 		glClearColor(1.0, 1.0, 1.0, 0.0);
-		glutCreateWindow("Kilobot simulator");
+		
 
 		glutDisplayFunc(draw_scene);
 		glutReshapeFunc(resize_window);
@@ -644,13 +645,13 @@ int main(int argc, char **argv)
 		glutInit(&argc, argv);
 		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 		glutInitWindowSize(windowWidth, windowHeight);
+		glutCreateWindow("Kilobot simulator");
 		glutInitWindowPosition(0, 0);
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0.0f, 1000, 1000, 0.0f, 0.0f, 1.0f);
 		glClearColor(1.0, 1.0, 1.0, 0.0);
-		glutCreateWindow("Kilobot simulator");
 
 		glutDisplayFunc(draw_scene);
 		glutReshapeFunc(resize_window);
