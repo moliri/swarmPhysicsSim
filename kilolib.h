@@ -159,8 +159,8 @@ public:
  		if (sd>(7*radius)) return 0; // it's more than 7 radius away
  		double d = distance(x,y,pos[0],pos[1]);
  		if (d < 7* radius)
- 			return d;
-		return 0;
+ 		return d;
+ 		return 0;
  	} 
 
 	bool comm_in_criteria(double x, double y, double d, float t, void *cd) 

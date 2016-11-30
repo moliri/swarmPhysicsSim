@@ -35,7 +35,7 @@ using namespace std;
 double time_sim;  //simulation time
 double zoom, view_x, view_y; //var. for zoom and scroll
 
-int num_robots = 2; //number of robots running
+int num_robots = 7; //number of robots running
 
 robot** robots;//creates an array of robots
 int* safe_distance;
@@ -512,18 +512,12 @@ void setup_positions()
 	int center_x=arena_width/2-columns/2 * horizontal_separation; 
 	int center_y=arena_height/2-rows/2 * vertical_separation;
 
-	
-	robots[0] = new mykilobot();
 
-	robots[0]->robot_init(100, 100, 0);
-	robots[0]->id=0;
-
-	robots[1] = new mykilobot();
-
-	robots[1]->robot_init(400, 400, 0);
-	robots[1]->id=1;
-
-
+	for(int i = 0; i < num_robots; i++) {
+		robots[i] = new mykilobot();
+		robots[i]->robot_init(500+50*i, 500+80*i, 0);
+		robots[i]->id=1;
+	}
 
 
 }

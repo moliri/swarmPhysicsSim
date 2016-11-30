@@ -22,60 +22,60 @@ class mykilobot : public kilobot
 	void loop()
 	{	
 	
-		if(id==0)
-		{
+		// if(id==0)
+		// {
 			
-			if(fabs(theta)<.3)
-			{
+		// 	if(fabs(theta)<.3)
+		// 	{
 				
-				spinup_motors();
-				set_motors(50,50);
+		// 		spinup_motors();
+		// 		set_motors(50,50);
 
-			}
-			else if(theta<0)
-			{
-				spinup_motors();
-				set_motors(kilo_turn_left,0);
+		// 	}
+		// 	else if(theta<0)
+		// 	{
+		// 		spinup_motors();
+		// 		set_motors(kilo_turn_left,0);
 			
 			
 
-			}
-			else
-			{
-				spinup_motors();
-				set_motors(0,kilo_turn_right);
+		// 	}
+		// 	else
+		// 	{
+		// 		spinup_motors();
+		// 		set_motors(0,kilo_turn_right);
 	
 			
-			}
-		}
-		else
-		{
-			printf("compass =%f\n\r",compass);
+		// 	}
+		// }
+		// else
+		// {
+		// 	printf("compass =%f\n\r",compass);
 			
-			if(fabs(compass-1.5)<.1)
-			{
+		// 	if(fabs(compass-1.5)<.1)
+		// 	{
 				
-				spinup_motors();
-				set_motors(50,50);
+		// 		spinup_motors();
+		// 		set_motors(50,50);
 
-			}
-			else if(compass-1.5<0)
-			{
-				spinup_motors();
-				set_motors(kilo_turn_left,0);
+		// 	}
+		// 	else if(compass-1.5<0)
+		// 	{
+		// 		spinup_motors();
+		// 		set_motors(kilo_turn_left,0);
 			
 			
 
-			}
-			else
-			{
-				spinup_motors();
-				set_motors(0,kilo_turn_right);
+		// 	}
+		// 	else
+		// 	{
+		// 		spinup_motors();
+		// 		set_motors(0,kilo_turn_right);
 	
 			
-			}
+		// 	}
 
-		}
+		// }
 
 
 		
@@ -115,6 +115,7 @@ class mykilobot : public kilobot
 	{
 		distance = estimate_distance(distance_measurement);
 		theta=t;
+		printf("\ndistance: %d\n", distance);
 		
 	}
 };
