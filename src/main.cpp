@@ -521,7 +521,7 @@ void setup_positions()
 	// }
 
 	robots[0] = new mykilobot();
-	robots[0]->robot_init(550, 550, 30);
+	robots[0]->robot_init(500, 500, 30);
 	robots[0]->id=0;
 
 	robots[1] = new mykilobot();

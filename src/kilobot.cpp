@@ -12,7 +12,7 @@ class mykilobot : public kilobot
 	float vmotion;
 	float vrepulsion;
 	float vattraction;
-	float thetaDelta;
+	float regionRadius = 96;
 	
 	int motion=0;
 	long int motion_timer=0;
@@ -31,39 +31,36 @@ class mykilobot : public kilobot
 	//main loop
 	void loop()
 	{	
-		modTheta = fmod(theta, 2*PI);
-		printf("theta =%f\n\r",theta);
+		// modTheta = fmod(theta, 2*PI);
+		// vmotion = fmod(vmotion, 2*PI);
 		printf("modTheta =%f\n\r",modTheta);
+		printf("vmotion =%f\n\r",vmotion);
 		if(state == 0) { //listening to neighbors
 			printf("state: %d\n", state);
 			if (transmissionComplete) {
 				state = 1;
 				theta_distance = 100;
 			}
-
 		}
 
 		else if (state == 1) { //rotate
 			printf("state: %d\n", state);
-				thetaDelta = sumVectors(theta, vmotion);
 
-
-
-			if(fabs(modTheta+PI/2) <.1) { //if the angle is within the threshold
+			if(fabs(vmotion+PI/2) <.1) { //if the angle is within the threshold
 				state = 2;
 			}
 
-			else if((modTheta+PI/2) > 0) {
+			else if((vmotion+PI/2) > 0) {
 				spinup_motors();
 				set_motors(kilo_turn_left,0);
-				printf("turn left");
+				printf("turn left\n");
 			}
 
 			else
 			{
 				spinup_motors();
 				set_motors(0,kilo_turn_right);
-				printf("turn right");
+				printf("turn right\n");
 			}
 		}
 
@@ -71,13 +68,14 @@ class mykilobot : public kilobot
 			printf("state: %d\n", state);
 			spinup_motors();
 			set_motors(50,50);
-			printf("move straight");
+			printf("move straight\n");
 			theta_distance--;
 
 			if (theta_distance <=0) {
 				//reset
 				transmissionComplete = 0;
 				state = 0;
+				set_motors(0,0);
 			}
 		}
 
@@ -195,20 +193,24 @@ class mykilobot : public kilobot
 	{
 		distance = estimate_distance(distance_measurement);
 		theta=t;
-		// printf("distance: %d\n", distance);
+		printf("distance: %d\n", distance);
 
-		if (distance < radius) {
+		
+		modTheta = fmod(theta, 2*PI);
+		if (distance < regionRadius) {
 			//repulsion
-			if (theta < 0) {
-				vmotion = theta - PI;
+			printf("repulsion\n");
+			if (modTheta < 0) {
+				vmotion = modTheta - PI;
 			}
 			else {
-				vmotion = theta;
+				vmotion = modTheta + PI;
 			}
 		}
-		else if (distance > radius) {
+		else if (distance > regionRadius) {
 			//attraction
-			vmotion = theta;
+			vmotion = modTheta;
+			printf("attraction\n");
 		}
 		else {
 			//neutral
