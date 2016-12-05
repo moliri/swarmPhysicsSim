@@ -31,68 +31,71 @@ class mykilobot : public kilobot
 	void loop()
 	{	
 
-		// if(state == 0) { //listening to neighbors
-		// 	printf("state: %d\n", state);
-		// 	if (transmissionComplete) {
-		// 		state = 1;
+		if(state == 0) { //listening to neighbors
+			printf("state: %d\n", state);
+			if (transmissionComplete) {
+				state = 1;
 
-		// 		theta_distance = 100;
-		// 	}
+				theta_distance = 100;
+			}
 
-		// }
-
-		// else if (state == 1) { //rotate
-		// 	printf("state: %d\n", state);
-		// 		thetaDelta = sumVectors(theta, vmotion);
-
-
-
-		// 	if(fabs(theta)<.3) { //if the angle is within the threshold
-		// 		state = 2;
-		// 	}
-
-		// 	else if(theta<0) {
-		// 		spinup_motors();
-		// 		set_motors(kilo_turn_left,0);
-		// 	}
-
-		// 	else
-		// 	{
-		// 		spinup_motors();
-		// 		set_motors(0,kilo_turn_right);
-		// 	}
-		// }
-
-		// else if (state == 2) { //move forward 
-		// 	printf("state: %d\n", state);
-		// 	spinup_motors();
-		// 	set_motors(50,50);
-		// 	theta_distance--;
-
-		// 	if (theta_distance <=0) {
-		// 		//reset
-		// 		transmissionComplete = 0;
-		// 		state = 0;
-		// 	}
-		// }
-
-		printf("compass =%f\n\r",compass);
-		// printf("abs compass =%f\n\r",fabs(compass));
-		if(fabs(compass+PI/2) <.1) {
-			spinup_motors();
-			set_motors(50,50);
-			printf("move straight");
 		}
-		else if((compass+PI/2) > 0) {
-			spinup_motors();
-			set_motors(kilo_turn_left,0);
-			printf("turn left");
-		}
-		else {
+
+		else if (state == 1) { //rotate
+			printf("state: %d\n", state);
+				thetaDelta = sumVectors(theta, vmotion);
+
+
+
+			if(fabs(compass+PI/2) <.1) { //if the angle is within the threshold
+				state = 2;
+			}
+
+			else if((compass+PI/2) > 0) {
+				spinup_motors();
+				set_motors(kilo_turn_left,0);
+				printf("turn left");
+			}
+
+			else
+			{
 				spinup_motors();
 				set_motors(0,kilo_turn_right);
 				printf("turn right");
+			}
 		}
+
+		else if (state == 2) { //move forward 
+			printf("state: %d\n", state);
+			spinup_motors();
+			set_motors(50,50);
+			printf("move straight");
+			theta_distance--;
+
+			if (theta_distance <=0) {
+				//reset
+				transmissionComplete = 0;
+				state = 0;
+			}
+		}
+
+		// printf("compass =%f\n\r",compass);
+		// // printf("abs compass =%f\n\r",fabs(compass));
+		// if(fabs(compass+PI/2) <.1) {
+		// 	spinup_motors();
+		// 	set_motors(50,50);
+		// 	printf("move straight");
+		// }
+		// else if((compass+PI/2) > 0) {
+		// 	spinup_motors();
+		// 	set_motors(kilo_turn_left,0);
+		// 	printf("turn left");
+		// }
+		// else {
+		// 		spinup_motors();
+		// 		set_motors(0,kilo_turn_right);
+		// 		printf("turn right");
+		// }
 
 
 		// //default code
