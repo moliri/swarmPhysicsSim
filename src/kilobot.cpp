@@ -7,9 +7,18 @@ class mykilobot : public kilobot
 	message_t out_message;
 	int rxed=0;
 	float theta;
+
+	float vmotion;
+	float vrepulsion;
+	float vattraction;
+	float thetaDelta;
 	
 	int motion=0;
 	long int motion_timer=0;
+
+	int state = 0;
+	bool transmissionComplete = 0;
+	float theta_distance;
 
 	int msrx=0;
 	struct mydata {
@@ -21,8 +30,73 @@ class mykilobot : public kilobot
 	//main loop
 	void loop()
 	{	
-	
-		// if(id==0)
+
+		// if(state == 0) { //listening to neighbors
+		// 	printf("state: %d\n", state);
+		// 	if (transmissionComplete) {
+		// 		state = 1;
+
+		// 		theta_distance = 100;
+		// 	}
+
+		// }
+
+		// else if (state == 1) { //rotate
+		// 	printf("state: %d\n", state);
+		// 		thetaDelta = sumVectors(theta, vmotion);
+
+
+
+		// 	if(fabs(theta)<.3) { //if the angle is within the threshold
+		// 		state = 2;
+		// 	}
+
+		// 	else if(theta<0) {
+		// 		spinup_motors();
+		// 		set_motors(kilo_turn_left,0);
+		// 	}
+
+		// 	else
+		// 	{
+		// 		spinup_motors();
+		// 		set_motors(0,kilo_turn_right);
+		// 	}
+		// }
+
+		// else if (state == 2) { //move forward 
+		// 	printf("state: %d\n", state);
+		// 	spinup_motors();
+		// 	set_motors(50,50);
+		// 	theta_distance--;
+
+		// 	if (theta_distance <=0) {
+		// 		//reset
+		// 		transmissionComplete = 0;
+		// 		state = 0;
+		// 	}
+		// }
+
+		printf("compass =%f\n\r",compass);
+		// printf("abs compass =%f\n\r",fabs(compass));
+		if(fabs(compass+1.5) <.1) {
+			spinup_motors();
+			set_motors(50,50);
+			printf("move straight");
+		}
+		else if((compass+1.5) > 0) {
+			spinup_motors();
+			set_motors(kilo_turn_left,0);
+			printf("turn left");
+		}
+		else {
+				spinup_motors();
+				set_motors(0,kilo_turn_right);
+				printf("turn right");
+		}
+
+
+		// //default code
+		// if(id==0) //follow other robot
 		// {
 			
 		// 	if(fabs(theta)<.3)
@@ -75,10 +149,7 @@ class mykilobot : public kilobot
 			
 		// 	}
 
-		// }
-
-
-		
+		// }		
 		
 	}
 
@@ -95,6 +166,7 @@ class mykilobot : public kilobot
 	void message_tx_success()
 	{
 		//set_color(RGB(1,0,0));
+		transmissionComplete = 1;
 		
 	}
 
@@ -115,8 +187,38 @@ class mykilobot : public kilobot
 	{
 		distance = estimate_distance(distance_measurement);
 		theta=t;
-		printf("\ndistance: %d\n", distance);
+		// printf("distance: %d\n", distance);
+
+		if (distance < radius) {
+			//repulsion
+			vmotion = theta - PI;
+		}
+		else if (distance > radius) {
+			//attraction
+			vmotion = theta;
+		}
+		else {
+			//neutral
+			vmotion = 0;
+		}
+
+
+
 		
+	}
+
+	float sumVectors(float thetaA, float thetaB) {
+		float xposA = cos(thetaA);
+		float yposA = sin(thetaA);
+		float xposB = cos(thetaB);
+		float yposB = sin(thetaB);
+
+		float xposSum = xposA + xposB;
+		float yposSum = yposA + yposB;
+
+		float thetaSum = atan2(yposSum, xposSum);
+
+		return thetaSum;
 	}
 };
 

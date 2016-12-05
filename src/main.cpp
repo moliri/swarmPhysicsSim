@@ -35,7 +35,7 @@ using namespace std;
 double time_sim;  //simulation time
 double zoom, view_x, view_y; //var. for zoom and scroll
 
-int num_robots = 7; //number of robots running
+int num_robots = 2; //number of robots running
 
 robot** robots;//creates an array of robots
 int* safe_distance;
@@ -199,13 +199,14 @@ bool run_simulation_step()
 		}
 	}
 
-	//update angle to light for robots
-	for(i=0;i<num_robots;i++)
-	{
-
-	robots[i]->compass=fabs(fmod(robots[i]->pos[2],2*PI))-PI;
-	
-
+	//update angle to light for robots 
+	for(i=0;i<num_robots;i++) { 
+		if(robots[i]->pos[2]<0) { 
+			robots[i]->compass=fmod(robots[i]->pos[2],-2*PI)+PI; 
+		} 
+		else { 
+			robots[i]->compass=fmod(robots[i]->pos[2],2*PI)-PI; 
+		} 
 	}
 
 	int seed;
@@ -501,24 +502,31 @@ void setup_positions()
 {
 	
 	
-	int k = 0;
-	int columns = 10; // 10x10 i.e. 10 columns, 10 rows
-	int rows = (int)(num_robots / columns);
-	if (num_robots % columns) rows++;
- 	//robots are touching so seperation should be their diameter
-	int horizontal_separation = 15*radius;
-	int vertical_separation = 2*radius; 
-	//place robots in center of screen/arena, aesthetic preference
-	int center_x=arena_width/2-columns/2 * horizontal_separation; 
-	int center_y=arena_height/2-rows/2 * vertical_separation;
+	// int k = 0;
+	// int columns = 10; // 10x10 i.e. 10 columns, 10 rows
+	// int rows = (int)(num_robots / columns);
+	// if (num_robots % columns) rows++;
+ // 	//robots are touching so seperation should be their diameter
+	// int horizontal_separation = 15*radius;
+	// int vertical_separation = 2*radius; 
+	// //place robots in center of screen/arena, aesthetic preference
+	// int center_x=arena_width/2-columns/2 * horizontal_separation; 
+	// int center_y=arena_height/2-rows/2 * vertical_separation;
 
 
-	for(int i = 0; i < num_robots; i++) {
-		robots[i] = new mykilobot();
-		robots[i]->robot_init(500+50*i, 500+80*i, 0);
-		robots[i]->id=1;
-	}
+	// for(int i = 0; i < num_robots; i++) {
+	// 	robots[i] = new mykilobot();
+	// 	robots[i]->robot_init(200+50*i, 500+80*i, i*10);
+	// 	robots[i]->id=1;
+	// }
 
+	robots[0] = new mykilobot();
+	robots[0]->robot_init(400, 400, 30);
+	robots[0]->id=0;
+
+	robots[1] = new mykilobot();
+	robots[1]->robot_init(450, 450, 20);
+	robots[1]->id=1;
 
 }
 
