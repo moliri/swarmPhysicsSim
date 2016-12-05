@@ -7,6 +7,7 @@ class mykilobot : public kilobot
 	message_t out_message;
 	int rxed=0;
 	float theta;
+	float modTheta;
 
 	float vmotion;
 	float vrepulsion;
@@ -30,75 +31,76 @@ class mykilobot : public kilobot
 	//main loop
 	void loop()
 	{	
-
-		// if(state == 0) { //listening to neighbors
-		// 	printf("state: %d\n", state);
-		// 	if (transmissionComplete) {
-		// 		state = 1;
-
-		// 		theta_distance = 100;
-		// 	}
-
-		// }
-
-		// else if (state == 1) { //rotate
-		// 	printf("state: %d\n", state);
-		// 		thetaDelta = sumVectors(theta, vmotion);
-
-
-
-		// 	if(fabs(compass+PI/2) <.1) { //if the angle is within the threshold
-		// 		state = 2;
-		// 	}
-
-		// 	else if((compass+PI/2) > 0) {
-		// 		spinup_motors();
-		// 		set_motors(kilo_turn_left,0);
-		// 		printf("turn left");
-		// 	}
-
-		// 	else
-		// 	{
-		// 		spinup_motors();
-		// 		set_motors(0,kilo_turn_right);
-		// 		printf("turn right");
-		// 	}
-		// }
-
-		// else if (state == 2) { //move forward 
-		// 	printf("state: %d\n", state);
-		// 	spinup_motors();
-		// 	set_motors(50,50);
-		// 	printf("move straight");
-		// 	theta_distance--;
-
-		// 	if (theta_distance <=0) {
-		// 		//reset
-		// 		transmissionComplete = 0;
-		// 		state = 0;
-		// 	}
-		// }
-
-		printf("compass =%f\n\r",compass);
+		modTheta = fmod(theta, 2*PI);
 		printf("theta =%f\n\r",theta);
-		float modTheta = fmod(theta, 2*PI);
 		printf("modTheta =%f\n\r",modTheta);
-		// printf("abs compass =%f\n\r",fabs(compass));
-		if(fabs(modTheta+PI/2) <.1) {
-			spinup_motors();
-			set_motors(50,50);
-			printf("move straight");
+		if(state == 0) { //listening to neighbors
+			printf("state: %d\n", state);
+			if (transmissionComplete) {
+				state = 1;
+				theta_distance = 100;
+			}
+
 		}
-		else if((modTheta+PI/2) > 0) {
-			spinup_motors();
-			set_motors(kilo_turn_left,0);
-			printf("turn left");
-		}
-		else {
+
+		else if (state == 1) { //rotate
+			printf("state: %d\n", state);
+				thetaDelta = sumVectors(theta, vmotion);
+
+
+
+			if(fabs(modTheta+PI/2) <.1) { //if the angle is within the threshold
+				state = 2;
+			}
+
+			else if((modTheta+PI/2) > 0) {
+				spinup_motors();
+				set_motors(kilo_turn_left,0);
+				printf("turn left");
+			}
+
+			else
+			{
 				spinup_motors();
 				set_motors(0,kilo_turn_right);
 				printf("turn right");
+			}
 		}
+
+		else if (state == 2) { //move forward 
+			printf("state: %d\n", state);
+			spinup_motors();
+			set_motors(50,50);
+			printf("move straight");
+			theta_distance--;
+
+			if (theta_distance <=0) {
+				//reset
+				transmissionComplete = 0;
+				state = 0;
+			}
+		}
+
+		// printf("compass =%f\n\r",compass);
+		// printf("theta =%f\n\r",theta);
+		// float modTheta = fmod(theta, 2*PI);
+		// printf("modTheta =%f\n\r",modTheta);
+		// // printf("abs compass =%f\n\r",fabs(compass));
+		// if(fabs(modTheta+PI/2) <.1) {
+		// 	spinup_motors();
+		// 	set_motors(50,50);
+		// 	printf("move straight");
+		// }
+		// else if((modTheta+PI/2) > 0) {
+		// 	spinup_motors();
+		// 	set_motors(kilo_turn_left,0);
+		// 	printf("turn left");
+		// }
+		// else {
+		// 		spinup_motors();
+		// 		set_motors(0,kilo_turn_right);
+		// 		printf("turn right");
+		// }
 
 
 		// //default code
