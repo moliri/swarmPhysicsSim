@@ -78,12 +78,12 @@ class mykilobot : public kilobot
 
 		printf("compass =%f\n\r",compass);
 		// printf("abs compass =%f\n\r",fabs(compass));
-		if(fabs(compass+1.5) <.1) {
+		if(fabs(compass+PI/2) <.1) {
 			spinup_motors();
 			set_motors(50,50);
 			printf("move straight");
 		}
-		else if((compass+1.5) > 0) {
+		else if((compass+PI/2) > 0) {
 			spinup_motors();
 			set_motors(kilo_turn_left,0);
 			printf("turn left");
