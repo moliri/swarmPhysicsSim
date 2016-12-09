@@ -15,6 +15,8 @@ class mykilobot : public kilobot
 	float vattraction;
 
 	int mySpin;
+	int mValue;
+	int nValue;
 
 	float regionRadius = 96;
 	float motorTurnStrength = 50;
@@ -212,25 +214,22 @@ class mykilobot : public kilobot
 		distance = estimate_distance(distance_measurement);
 		theta=t;
 		int neighborSpin = message->data[0];
+		int neighborM = message->data[1];
+		int neighborN = message->data[2];
 		printf("distance: %d\n", distance);
 
 
 		printf("spin =%d\n\r",neighborSpin);
+		printf("m =%d\n\r",neighborM);
+		printf("n =%d\n\r",neighborN);
 		
 		modTheta = fmod(theta, 2*PI);
 		
-		//flip spin if distance is too close 
-		if (distance <= 64) {
-			// flip spin to 0 or 1
-			printf("flip spin\n");
-			if (mySpin==0) {
-				mySpin = 1;
-			}
-			else {
-				mySpin = 0;
-			}
-			out_message.data[0] = mySpin;
-		}
+
+		float vsort = calculateSortAngle(neighborM, neighborN);
+		float vsortAndMotion;
+
+
 
 		//determine region radius based on spin
 		if (neighborSpin==mySpin) {
@@ -265,7 +264,8 @@ class mykilobot : public kilobot
 			motorTurnStrength = 20; //dampening turn strength if they are within range
 		}
 
-		vmotionSum = sumVectors(vmotion, vmotionSum);
+		vsortAndMotion = sumVectors(vmotion, vsort);
+		vmotionSum = sumVectors(vsortAndMotion, vmotionSum);
 		
 	}
 
@@ -281,6 +281,33 @@ class mykilobot : public kilobot
 		float thetaSum = atan2(yposSum, xposSum);
 
 		return thetaSum;
+	}
+
+	float calculateSortAngle(int neighborM, int neighborN) {
+
+		float sortAngle;
+		if (compass < 0) { //if compass is negative, add
+			if (mValue < neighborM) {//if my M value is less than my neighbor's
+				//move left
+				sortAngle = compass + 0;
+			}
+			if (nValue < neighborN) {//if my N value is less than my neighbor's
+				//move down
+				sortAngle = compass + (PI/2);
+			}
+		}
+
+		else { //else if compass is positive, subtract
+			if (mValue < neighborM) {//if my M value is less than my neighbor's
+				//move left
+				sortAngle = compass - 0;
+			}
+			if (nValue < neighborN) {//if my N value is less than my neighbor's
+				//move down
+				sortAngle = compass - (PI/2);
+			}
+		}
+		return sortAngle;
 	}
 };
 
