@@ -156,9 +156,9 @@ public:
 
 	double comm_out_criteria(double x, double y, int sd) //standard circular transmission area
  	{
- 		if (sd>(7*radius)) return 0; // it's more than 7 radius away
+ 		if (sd>(15*radius)) return 0; // it's more than 7 radius away
  		double d = distance(x,y,pos[0],pos[1]);
- 		if (d < 7* radius)
+ 		if (d < 15* radius)
  			return d;
 		return 0;
  	} 

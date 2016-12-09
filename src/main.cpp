@@ -35,7 +35,7 @@ using namespace std;
 double time_sim;  //simulation time
 double zoom, view_x, view_y; //var. for zoom and scroll
 
-int num_robots = 9; //number of robots running
+int num_robots = 300; //number of robots running
 
 robot** robots;//creates an array of robots
 int* safe_distance;
@@ -501,24 +501,48 @@ void on_idle(void) {
 void setup_positions()
 {
 	
-	
 	int k = 0;
-	int columns = 10; // 10x10 i.e. 10 columns, 10 rows
+	int columns = (int)sqrt((num_robots * arena_width / arena_height));
 	int rows = (int)(num_robots / columns);
 	if (num_robots % columns) rows++;
- 	//robots are touching so seperation should be their diameter
-	int horizontal_separation = 15*radius;
-	int vertical_separation = 2*radius; 
-	//place robots in center of screen/arena, aesthetic preference
-	int center_x=arena_width/2-columns/2 * horizontal_separation; 
-	int center_y=arena_height/2-rows/2 * vertical_separation;
+	// int horizontal_separation =  arena_width / (columns + 1); //radius = 16
+	// int vertical_separation = (int)arena_height / (rows + 1);
 
+	int horizontal_separation =  128; //radius = 16
+	int vertical_separation = 128;
 
-	for(int i = 0; i < num_robots; i++) {
-		robots[i] = new mykilobot();
-		robots[i]->robot_init(200+50*i, 500+80*i, i*10);
-		robots[i]->id=1;
+	for (int i = 0;i < num_robots;i++)
+	{
+		int c = i % columns + 1; //columns
+		int r = i / columns + 1; //rows
+		int hr = rand() % (horizontal_separation / 2) + horizontal_separation / 4;
+		int x = c * horizontal_separation;// + hr;
+		int vr = rand() % (vertical_separation / 2) + vertical_separation / 4;
+		int y = r * vertical_separation;// + vr;
+		robots[k] = new mykilobot();
+		double t = rand() * 2 * PI / RAND_MAX;
+		robots[k]->robot_init(x, y, t);
+		k++;
 	}
+
+	//original
+	// int k = 0;
+	// int columns = 10; // 10x10 i.e. 10 columns, 10 rows
+	// int rows = (int)(num_robots / columns);
+	// if (num_robots % columns) rows++;
+ // 	//robots are touching so seperation should be their diameter
+	// int horizontal_separation = 15*radius;
+	// int vertical_separation = 2*radius; 
+	// //place robots in center of screen/arena, aesthetic preference
+	// int center_x=arena_width/2-columns/2 * horizontal_separation; 
+	// int center_y=arena_height/2-rows/2 * vertical_separation;
+
+
+	// for(int i = 0; i < num_robots; i++) {
+	// 	robots[i] = new mykilobot();
+	// 	robots[i]->robot_init(200+ 50*i, 500+50*i, 0);
+	// 	robots[i]->id=1;
+	// }
 
 	// robots[0] = new mykilobot();
 	// robots[0]->robot_init(500, 500, 30);

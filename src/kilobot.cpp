@@ -10,9 +10,11 @@ class mykilobot : public kilobot
 	float modTheta;
 
 	float vmotion;
+	float vmotionSum = 0;
 	float vrepulsion;
 	float vattraction;
 	float regionRadius = 96;
+	float motorTurnStrength = 50;
 	
 	int motion=0;
 	long int motion_timer=0;
@@ -35,11 +37,13 @@ class mykilobot : public kilobot
 		// vmotion = fmod(vmotion, 2*PI);
 		printf("modTheta =%f\n\r",modTheta);
 		printf("vmotion =%f\n\r",vmotion);
+		printf("vmotionSum =%f\n\r",vmotionSum);
+
 		if(state == 0) { //listening to neighbors
 			printf("state: %d\n", state);
 			if (transmissionComplete) {
 				state = 1;
-				theta_distance = 100;
+				theta_distance = 10;
 			}
 		}
 
@@ -52,14 +56,14 @@ class mykilobot : public kilobot
 
 			else if((vmotion+PI/2) > 0) {
 				spinup_motors();
-				set_motors(kilo_turn_left,0);
+				set_motors(motorTurnStrength,0);
 				printf("turn left\n");
 			}
 
 			else
 			{
 				spinup_motors();
-				set_motors(0,kilo_turn_right);
+				set_motors(0,motorTurnStrength);
 				printf("turn right\n");
 			}
 		}
@@ -67,7 +71,7 @@ class mykilobot : public kilobot
 		else if (state == 2) { //move forward 
 			printf("state: %d\n", state);
 			spinup_motors();
-			set_motors(50,50);
+			set_motors(motorTurnStrength,motorTurnStrength);
 			printf("move straight\n");
 			theta_distance--;
 
@@ -75,7 +79,8 @@ class mykilobot : public kilobot
 				//reset
 				transmissionComplete = 0;
 				state = 0;
-				set_motors(0,0);
+				vmotionSum = 0;
+				// set_motors(0,0);
 			}
 		}
 
@@ -214,8 +219,11 @@ class mykilobot : public kilobot
 		}
 		else {
 			//neutral
-			vmotion = 0;
+			// vmotion = 0;
+			motorTurnStrength = 20; //dampening turn strength if they are within range
 		}
+
+		vmotionSum = sumVectors(vmotion, vmotionSum);
 		
 	}
 
