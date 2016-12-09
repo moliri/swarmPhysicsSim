@@ -13,6 +13,9 @@ class mykilobot : public kilobot
 	float vmotionSum = 0;
 	float vrepulsion;
 	float vattraction;
+
+	int mySpin;
+
 	float regionRadius = 96;
 	float motorTurnStrength = 50;
 	
@@ -38,6 +41,7 @@ class mykilobot : public kilobot
 		printf("modTheta =%f\n\r",modTheta);
 		printf("vmotion =%f\n\r",vmotion);
 		printf("vmotionSum =%f\n\r",vmotionSum);
+
 
 		if(state == 0) { //listening to neighbors
 			printf("state: %d\n", state);
@@ -167,7 +171,10 @@ class mykilobot : public kilobot
 	//executed once at start
 	void setup()
 	{
-		
+		// set spin to 0 or 1
+		mySpin = rand() % 2;
+		out_message.data[0] = mySpin;
+
 		out_message.type = NORMAL;
 		out_message.crc = message_crc(&out_message);
 		set_color(RGB(0,1,0)); //starting color doesn't matter
@@ -198,10 +205,25 @@ class mykilobot : public kilobot
 	{
 		distance = estimate_distance(distance_measurement);
 		theta=t;
+		int neighborSpin = message->data[0];
 		printf("distance: %d\n", distance);
 
+
+		printf("spin =%d\n\r",neighborSpin);
 		
 		modTheta = fmod(theta, 2*PI);
+		
+		if (neighborSpin==mySpin) {
+			//if I have same spin as neighbor
+			 regionRadius = sqrt(2)*regionRadius;
+			 printf("same spin\n");
+		}
+		else {
+			//if I have different spin as neighbor
+			regionRadius = 96; //hard coded =(
+			printf("diff spin\n");
+		}
+
 		if (distance < regionRadius) {
 			//repulsion
 			printf("repulsion\n");
