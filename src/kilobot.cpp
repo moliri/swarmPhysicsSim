@@ -213,6 +213,20 @@ class mykilobot : public kilobot
 		
 		modTheta = fmod(theta, 2*PI);
 		
+		//flip spin if distance is too close 
+		if (distance <= 32) {
+			// flip spin to 0 or 1
+			printf("flip spin\n");
+			if (mySpin==0) {
+				mySpin = 1;
+			}
+			else {
+				mySpin = 0;
+			}
+			out_message.data[0] = mySpin;
+		}
+
+		//determine region radius based on spin
 		if (neighborSpin==mySpin) {
 			//if I have same spin as neighbor
 			 regionRadius = sqrt(2)*regionRadius;
