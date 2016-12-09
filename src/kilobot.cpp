@@ -214,7 +214,7 @@ class mykilobot : public kilobot
 		modTheta = fmod(theta, 2*PI);
 		
 		//flip spin if distance is too close 
-		if (distance <= 32) {
+		if (distance <= 64) {
 			// flip spin to 0 or 1
 			printf("flip spin\n");
 			if (mySpin==0) {
