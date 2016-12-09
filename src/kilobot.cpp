@@ -175,6 +175,12 @@ class mykilobot : public kilobot
 		mySpin = rand() % 2;
 		out_message.data[0] = mySpin;
 
+		//set (m,n) positions
+		mValue = rand() % 256;
+		nValue = rand() % 256;
+		out_message.data[1] = mValue;
+		out_message.data[2] = nValue;
+
 		out_message.type = NORMAL;
 		out_message.crc = message_crc(&out_message);
 		set_color(RGB(0,1,0)); //starting color doesn't matter
